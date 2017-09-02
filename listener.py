@@ -9,6 +9,9 @@ class TwitterListener(tweepy.StreamListener):
     ABC  to Twitter Listener
     TO-DO : use abc module from python to make it abstract method
     """
+    def __init__(self):
+        self.visited = dict()
+
     def on_data(self, data):
         # Parsing
         if type(data) is not dict:
@@ -23,17 +26,21 @@ class TwitterListener(tweepy.StreamListener):
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(decoded['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
             time_ = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
 
-        print "text:",text
-        print "time:",time_
+        if (text not in self.visited) and ('wicket' in text.split() or 'wicket' in text.split()):
+            self.visited[text] = True
+            print "text:",text
+            print "time:",time_
 
         self.handle_output_logging(decoded)
         #print "Writing tweets to file,CTRL+C to terminate the program"
 
         return True
 
+    def on_status(self, status):
+        print status.text
 
     def on_error(self, status):
-        print status
+        print status.text
 
     def handle_output_logging(self, data):
         raise NotImplementedError("handle_output_logging is not implemented")
