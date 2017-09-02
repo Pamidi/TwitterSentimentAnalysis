@@ -1,0 +1,5 @@
+
+  self._consumer_key = "8zmH980xpX6J5expJcIDurA6z"
+  self._consumer_secret = "GuoWM8HF5pKTkMkEWZiLUsNKX10AR63r2cHMcSHhpBDJb9Sh6R"
+  self._access_token = "903884578170875904-90jIoYZpnwAou8MS8bqdU3Rfmnshwz9"
+  self._access_token_secret = "JFYV2fM3IYNxWQOPTV6qYihAJyoNcNn9QuYfLYKpuXKvN"
