@@ -25,8 +25,16 @@ class TwitterClient:
         except:
             raise Exception("Authentication for Twitter API failed.")
 
+    def get_old_tweets(self, hashtags):
+        api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+        tweets = tweepy.Cursor(api.search,q=hashtags[0]).items()
+
+        while True:
+            tweet = tweets.next()
+            self._listener.on_data(dict(tweet._json))
 
     def stream_data(self, hashtags):
+        print "streaming data.."
         stream = tweepy.Stream(self.auth, self._listener)
 
         #Hashtag to stream
