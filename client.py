@@ -44,25 +44,31 @@ class TwitterClient:
     def get_all_tweets(self,screen_name):
         self.auth = tweepy.OAuthHandler(self._consumer_key, self._consumer_secret)
         self.auth.set_access_token(self._access_token, self._access_token_secret)
-        api = tweepy.API(self.auth)  
+        api = tweepy.API(self.auth)
 
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200)      
+        new_tweets = api.user_timeline(screen_name = screen_name,count=200)
 
+        alltweets = []
         #save most recent tweets
         alltweets.extend(new_tweets)
-        
+        for tweet in alltweets:
+            self._listener.on_data(tweet._json)
+
         #save the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
-        
+
         #keep grabbing tweets until there are no tweets left to grab
         while len(new_tweets) > 0:
-            
+
             #all subsiquent requests use the max_id param to prevent duplicates
             new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
-            
+
             #save most recent tweets
             alltweets.extend(new_tweets)
-            
+            for tweet in alltweets:
+                self._listener.on_data(tweet._json)
+
+
             #update the id of the oldest tweet less one
             oldest = alltweets[-1].id - 1
 
