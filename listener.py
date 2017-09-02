@@ -1,9 +1,6 @@
 import tweepy
 import json
-<<<<<<< HEAD
 import pdb
-=======
->>>>>>> 0e39070c9c22dac23f4c6fd4192b4b755991da57
 from datetime import datetime
 import time
 
@@ -13,7 +10,6 @@ class TwitterListener(tweepy.StreamListener):
     TO-DO : use abc module from python to make it abstract method
     """
     def on_data(self, data):
-        import pdb; pdb.set_trace()
         # Parsing
         if type(data) is not dict:
             #for streaming cases
