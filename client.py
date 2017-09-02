@@ -1,4 +1,5 @@
 import tweepy
+import json
 # encoding: utf-8
 
 class TwitterClient:
@@ -11,10 +12,10 @@ class TwitterClient:
         #Twitter API credentials
         #keys should be private
 
-        self._consumer_key = "8zmH980xpX6J5expJcIDurA6z"
-        self._consumer_secret = "GuoWM8HF5pKTkMkEWZiLUsNKX10AR63r2cHMcSHhpBDJb9Sh6R"
-        self._access_token = "903884578170875904-90jIoYZpnwAou8MS8bqdU3Rfmnshwz9"
-        self._access_token_secret = "JFYV2fM3IYNxWQOPTV6qYihAJyoNcNn9QuYfLYKpuXKvN"
+        self._consumer_key = "kqK6cNTbjXbB1dVV132cKQ4OL"
+        self._consumer_secret = "W0hK9dH2ITU1lqT9J80s3n0QR2yWZdsMXzAIwUkZDHtE18OVEh"
+        self._access_token = "903888577028689920-Yqpx4QaZqUpNZr5WvP1gd9umVdgMJbn"
+        self._access_token_secret = "ch3SSIN8jOFNqGlx1JGQXnRuJkM88SP8xo1n7FARjZaft"
 
         self._listener = listener
 
@@ -27,7 +28,16 @@ class TwitterClient:
 
 
     def stream_data(self, hashtags):
+        print "streaming data:"
         stream = tweepy.Stream(self.auth, self._listener)
 
         #Hashtag to stream
         stream.filter(track=hashtags)
+
+    def get_old_tweets(self, hashtags):
+        api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+        tweets =tweepy.Cursor(api.search,q=hashtags[0]).items()
+
+        while True:
+            tweet = tweets.next()
+            self._listener.on_data(dict(tweet._json))

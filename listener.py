@@ -1,5 +1,8 @@
 import tweepy
 import json
+import pdb
+from datetime import datetime
+import time
 
 class TwitterListener(tweepy.StreamListener):
     """
@@ -8,10 +11,20 @@ class TwitterListener(tweepy.StreamListener):
     """
     def on_data(self, data):
         # Parsing
-        decoded = json.loads(data)
-
+        if type(data) is not dict:
+            #for streaming cases
+            decoded = json.loads(data)
+            text =  decoded['text']
+            time_ =  datetime.fromtimestamp(float(decoded['timestamp_ms'])/1000.0)
+        else:
+            #for fetching old tweets
+            decoded = data
+            text = decoded['text']
+            ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(decoded['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
+            time_ = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")   
+        
         self.handle_output_logging(decoded)
-        print "Writing tweets to file,CTRL+C to terminate the program"
+        #print "Writing tweets to file,CTRL+C to terminate the program"
 
         return True
 
@@ -29,7 +42,8 @@ class ConsoleOutputListener(TwitterListener):
     """
 
     def handle_output_logging(self, data):
-        print data
+        #print data
+        pass
 
 
 class FileOutputListener(TwitterListener):

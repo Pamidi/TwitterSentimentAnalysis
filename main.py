@@ -9,8 +9,9 @@ def main():
 
     #create twitter client
     client = TwitterClient(listener)
-    hashtags = ['#cricket']
-    client.stream_data(hashtags)
+    hashtags = ['#INDvsSL']
+    client.get_old_tweets(hashtags)
+    #client.stream_data(hashtags)
 
 
 if __name__ == "__main__":
