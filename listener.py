@@ -3,6 +3,7 @@ import json
 import pdb
 from datetime import datetime
 import time
+from tweet import Tweet
 
 class TwitterListener(tweepy.StreamListener):
     """
@@ -36,8 +37,10 @@ class TwitterListener(tweepy.StreamListener):
         #print "Writing tweets to file,CTRL+C to terminate the program"
 
         #run the clustering algorithm over the tweet
-        self.cluster_engine.process(text, time_)
-        
+        #create a tweet object
+        tweet = Tweet(text, time_)
+        self.cluster_engine.process(tweet)
+
         return True
 
     def on_status(self, status):

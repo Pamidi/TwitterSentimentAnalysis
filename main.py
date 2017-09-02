@@ -14,6 +14,7 @@ def main():
     match_hashtag = match.get_match_details()
     #create the engine
     ce = ClusteringEngine(match)
+    ce.train_data()
 
     #first create the listener
     listener = ConsoleOutputListener(ce)
@@ -25,6 +26,7 @@ def main():
     #client.get_tweets_by_user('@tweetcricscore')
     client.get_all_tweets(match_hashtag)
 
+    #now process the match event tree to order the tweets in output
 
 if __name__ == "__main__":
     main()
