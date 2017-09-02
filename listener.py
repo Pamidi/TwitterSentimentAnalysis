@@ -26,20 +26,21 @@ class TwitterListener(tweepy.StreamListener):
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(decoded['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
             time_ = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
 
-        if text not in self.visited and "wicket" in text.split() or "down" in text.split():
-            pdb.set_trace()
+        if (text not in self.visited) and ('wicket' in text.split() or 'wicket' in text.split()):
+            self.visited[text] = True
             print "text:",text
             print "time:",time_
-            self.visited[text] = True
 
         self.handle_output_logging(decoded)
         #print "Writing tweets to file,CTRL+C to terminate the program"
 
         return True
 
+    def on_status(self, status):
+        print status.text
 
     def on_error(self, status):
-        print status
+        print status.text
 
     def handle_output_logging(self, data):
         raise NotImplementedError("handle_output_logging is not implemented")
