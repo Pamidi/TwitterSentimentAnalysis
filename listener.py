@@ -9,8 +9,9 @@ class TwitterListener(tweepy.StreamListener):
     ABC  to Twitter Listener
     TO-DO : use abc module from python to make it abstract method
     """
-    def __init__(self):
+    def __init__(self, cluster_engine):
         self.visited = dict()
+        self.cluster_engine = cluster_engine
 
     def on_data(self, data):
         # Parsing
@@ -26,7 +27,7 @@ class TwitterListener(tweepy.StreamListener):
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(decoded['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
             time_ = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
 
-        if (text not in self.visited) and ('wicket' in text.split() or 'wicket' in text.split()):
+        if (text not in self.visited) and ('SIX' in text):
             self.visited[text] = True
             print "text:",text
             print "time:",time_
@@ -34,6 +35,9 @@ class TwitterListener(tweepy.StreamListener):
         self.handle_output_logging(decoded)
         #print "Writing tweets to file,CTRL+C to terminate the program"
 
+        #run the clustering algorithm over the tweet
+        self.cluster_engine.process(text, time_)
+        
         return True
 
     def on_status(self, status):

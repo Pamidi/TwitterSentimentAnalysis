@@ -35,13 +35,13 @@ class TwitterClient:
 
     def get_old_tweets(self, hashtags):
         api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-        tweets =tweepy.Cursor(api.search,q=hashtags[0]).items()
+        tweets =tweepy.Cursor(api.search,q=hashtags).items()
 
         while True:
             tweet = tweets.next()
             self._listener.on_data(dict(tweet._json))
 
-    def get_all_tweets(self,screen_name):
+    def get_all_tweets(self, screen_name):
         self.auth = tweepy.OAuthHandler(self._consumer_key, self._consumer_secret)
         self.auth.set_access_token(self._access_token, self._access_token_secret)
         api = tweepy.API(self.auth)
