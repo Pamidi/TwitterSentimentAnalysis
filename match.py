@@ -42,6 +42,7 @@ class Match:
         #3.four, six, ith wicket, ith powerplay
         #4. ith four, ith six
         #create root
+        import pdb; pdb.set_trace()
         root = Event('MATCH-INDIA-SRILANKA')
         l1_n1 = Event('TOSS', keywords= ['toss'])
         l1_n2 = Event('WICKET', keywords=['wicket','out','lbw','caught','bowled'], is_dynamic = True)
@@ -57,13 +58,15 @@ class Match:
         l2_n1 = Event('FOUR',keywords=['four'], is_dynamic = True)
         l2_n2 = Event('SIX',keywords=['six'], is_dynamic = True)
 
-
-        l1_n3.children.append(l2_n1)
-        l1_n3.children.append(l2_n2)
-        
         root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11]
 
+        import pdb; pdb.set_trace()
+        l1_n3.children.append(l2_n1)
+        l1_n3.children.append(l2_n2)
+
+
         self.match_event_tree = EventHierarchy(root)
+        import pdb; pdb.set_trace()
         #aggregate_keyword_for_nodes now
         self.match_event_tree.aggregate_keyword_for_nodes()
 

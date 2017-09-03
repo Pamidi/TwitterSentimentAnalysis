@@ -12,7 +12,7 @@ class Event:
     #IN MILLISECONDS
     NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000
 
-    def __init__(self, title, keywords = None, children = [], is_dynamic = False):
+    def __init__(self, title, keywords = [], children = [], is_dynamic = False):
         self.title = title
         self.keywords = keywords
         self.children = children
@@ -115,28 +115,28 @@ class EventHierarchy:
         #handling precedence of words(just a basic model)
         tkns = []
         if  'toss' in tokens:
-            tkns+  = ['toss']
+            tkns+= ['toss']
 
         if 'six' in tokens:
-            tkns+ = ['six']
+            tkns+= ['six']
 
         if 'four' in tokens:
-            tkns+ = ['four']
+            tkns+= ['four']
 
         if ('wicket' in tokens) or ('out' in tokens) or ('lbw' in tokens) or ('caught' in tokens) or ('bowled' in tokens):
             #if boundary, don't consider this as a wicket
             if ('six' not in tkns) and ('four' not in tkns):
-                tkns+ = ['wicket']
+                tkns+= ['wicket']
 
         if ('century' in tokens) or ('hundred' in tokens) or ('100' in tokens):
             if 'wicket' not in tkns:
-                tkns+ = ['']
+                tkns+= ['']
 
         if ('fifty' in tokens) or ('50' in tokens) or ('half century' in tokens):
             tkns += 'fifty'
 
         if 'powerplay' in tokens:
-            tkns+ = ['powerplay']
+            tkns+= ['powerplay']
 
         if 'hat-trick' in tokens:
             tkns+= ['hat-trick']
@@ -145,10 +145,10 @@ class EventHierarchy:
             tkns+= ['maiden']
 
         if 'drinks' in tokens:
-            tkns+ = ['drinks']
+            tkns+= ['drinks']
 
         if 'innings' in tokens or 'break' in tokens:
-            tkns+ = ['innings']
+            tkns+= ['innings']
 
         self._propogate_tweet(self.root, tkns, tweet)
 
@@ -160,8 +160,12 @@ class EventHierarchy:
         if not nd.children:
             return []
 
+        import pdb; pdb.set_trace()
+
+        print "title:",nd.title
+
         #else propogate the value of its children
-        agg_keywords = root.keywords
+        agg_keywords = nd.keywords
         for child in nd.children:
             agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
 
