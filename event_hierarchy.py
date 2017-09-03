@@ -119,7 +119,6 @@ class EventHierarchy:
             #update the median of the last cluster group
             #if no child or tweet.tm outside threshold
             tweet_ts =  time.mktime(tweet.ts.timetuple())
-            import ipdb; ipdb.set_trace()
 
             if (not nd.children) or (tweet_ts - nd.children[-1].median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
                 #add new node

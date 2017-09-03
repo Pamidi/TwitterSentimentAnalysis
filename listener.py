@@ -38,7 +38,7 @@ class TwitterListener(tweepy.StreamListener):
 
         #run the clustering algorithm over the tweet
         #create a tweet object
-        tweet = Tweet(text, time_)
+        tweet = Tweet(text, time_, decoded)
         self.cluster_engine.process(tweet)
 
         self.cluster_engine.match_event_tree.display_tree()
