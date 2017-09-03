@@ -113,7 +113,7 @@ class EventHierarchy:
         #else for any of the child that contain they token, take the path
         for child in nd.children:
             #if any of the token match the children take the path
-            if bool(set(tokens) and set(child.keywords)):
+            if bool(set(tokens) & set(child.keywords)):
                 #take this path
                 self._propogate_tweet(child, tokens, tweet)
 
