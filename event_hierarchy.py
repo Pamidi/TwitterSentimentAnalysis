@@ -166,7 +166,7 @@ class EventHierarchy:
 
         #century and come with wicket
         if ('fifty' in tokens) or ('50' in tokens) or ('half century' in tokens):
-            if 'wicket' in tkns:
+            if 'wicket' in tokens:
                 tokens.remove('wicket')
 
         self._propogate_tweet(self.root, tokens, tweet)
