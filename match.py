@@ -61,8 +61,7 @@ class Match:
         root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11]
 
         import pdb; pdb.set_trace()
-        l1_n3.children.append(l2_n1)
-        l1_n3.children.append(l2_n2)
+        l1_n3.children = [l2_n1,l2_n2]
 
 
         self.match_event_tree = EventHierarchy(root)
