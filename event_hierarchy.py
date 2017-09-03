@@ -11,7 +11,7 @@ class Event:
     represents each event in the event hierarchy
     """
     #IN MILLISECONDS
-    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000 * 70
+    NODE_SPLIT_TIMESTAMP_THRESHOLD = 120
 
     def __init__(self, title, keywords = None, children = None, is_dynamic = False):
         self.title = title
@@ -150,7 +150,7 @@ class EventHierarchy:
 
                     #update the name for all nodes from index 1
                     for index, value in enumerate(nd.children[1:]):
-                        nd.children[index+1].title = nd.title + '_' + str(index + 1)
+                        nd.children[index+1].title = nd.title + '_' + str(index + 2)
 
                 else:
                     #add it to the existing node
