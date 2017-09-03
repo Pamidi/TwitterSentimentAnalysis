@@ -12,7 +12,7 @@ class Event:
     #IN MILLISECONDS
     NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000
 
-    def __init__(self, title, keywords = [], children = None, is_dynamic = False):
+    def __init__(self, title, keywords = None, children = None, is_dynamic = False):
         self.title = title
         self.keywords = keywords
         self.children = children
