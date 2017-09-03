@@ -26,7 +26,6 @@ class ClusteringEngine:
         """
 
         #identify the applicable event keywords for this text
-        import ipdb; ipdb.set_trace()
         text = self.cleanup_data(tweet.text)
         tokens = [str(t.lower()).translate(None, string.punctuation) for t in tweet.text.split()]
 

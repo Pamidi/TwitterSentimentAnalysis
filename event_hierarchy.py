@@ -11,7 +11,7 @@ class Event:
     represents each event in the event hierarchy
     """
     #IN MILLISECONDS
-    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000
+    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000 * 15
 
     def __init__(self, title, keywords = None, children = None, is_dynamic = False):
         self.title = title
@@ -55,10 +55,10 @@ class Event:
             return -1*self.maxHeap[0]
 
     def __repr__(self):
-        print self.title
+        return self.title
 
     def __str__(self):
-        print self.title
+        return self.title
 
 class EventHierarchy:
     """
@@ -70,6 +70,30 @@ class EventHierarchy:
     """
     def __init__(self, root):
         self.root = root
+
+
+    def _display_tree(self, nd):
+        if not nd:
+            return
+
+        #print this node if it has tweets
+        if nd.tweets_for_event:
+            print "NODE:", nd.title        
+            for twt in nd.tweets_for_event:
+                print "tweet text:",twt.text
+                print "tweet time:",twt.ts
+            print "NODE median timestamp:", nd.median_timestamp
+            print ""
+
+        #if this node has no children, return
+        if not nd.children:
+            return
+
+        for child in nd.children:
+            self._display_tree(child)
+
+    def display_tree(self):
+        self._display_tree(self.root)
 
     def _propogate_tweet(self, nd, tokens, tweet):
         #if no tokens, return
@@ -126,7 +150,6 @@ class EventHierarchy:
         """
         #handling precedence of words(just a basic model)
         tkns = []
-        import ipdb; ipdb.set_trace()
         if  'toss' in tokens:
             tkns+= ['toss']
 

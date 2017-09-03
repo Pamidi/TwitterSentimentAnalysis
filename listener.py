@@ -30,8 +30,8 @@ class TwitterListener(tweepy.StreamListener):
 
         if (text not in self.visited):
             self.visited[text] = True
-            print "text:",text
-            print "time:",time_
+            print "received text:",text
+            print "received time:",time_
 
         self.handle_output_logging(decoded)
         #print "Writing tweets to file,CTRL+C to terminate the program"
@@ -40,6 +40,8 @@ class TwitterListener(tweepy.StreamListener):
         #create a tweet object
         tweet = Tweet(text, time_)
         self.cluster_engine.process(tweet)
+
+        self.cluster_engine.match_event_tree.display_tree()
         import ipdb; ipdb.set_trace()
         return True
 
