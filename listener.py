@@ -4,6 +4,7 @@ import pdb
 from datetime import datetime
 import time
 from tweet import Tweet
+import pickle
 
 class TwitterListener(tweepy.StreamListener):
     """
@@ -32,6 +33,9 @@ class TwitterListener(tweepy.StreamListener):
             self.visited[text] = True
             print "received text:",text
             print "received time:",time_
+        else:
+            #already visited tweet. skipping for now
+            return True
 
         self.handle_output_logging(decoded)
         #print "Writing tweets to file,CTRL+C to terminate the program"
@@ -42,7 +46,15 @@ class TwitterListener(tweepy.StreamListener):
         self.cluster_engine.process(tweet)
 
         self.cluster_engine.match_event_tree.display_tree()
-        import ipdb; ipdb.set_trace()
+
+        #pickle the root of the tree to save the state of the application
+        """
+        TO-DO : move to a key value store for saving the tree for multiple matches
+        """
+        print "pickling root.."
+        with open("/home/xavier/Desktop/twitter/data/root.pkl","wb") as output_file:
+            pickle.dump(self.cluster_engine.match_event_tree, output_file)
+        time.sleep(1)
         return True
 
     def on_status(self, status):

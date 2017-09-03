@@ -59,10 +59,12 @@ class Match:
         l1_n14 = Event('SCORE_UPDATE', keywords = ['ovs','over','overs','score'], is_dynamic = True)
         l1_n15 = Event('WIDE', keywords = ['wide'], is_dynamic = True)
         l1_n16 = Event('NO_BALL', keywords = ['no ball'], is_dynamic = True)
+        l1_n17 = Event('APPEAL', keywords = ['appeal'], is_dynamic = True)
+        l1_n18 = Event('KOHLI', keywords = ['virat','kohli'])
         l2_n1 = Event('FOUR',keywords=['four'], is_dynamic = True)
         l2_n2 = Event('SIX',keywords=['six'], is_dynamic = True)
 
-        root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11, l1_n12, l1_n13, l1_n14]
+        root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11, l1_n12, l1_n13, l1_n14,l1_n15,l1_n16,l1_n17,l1_n18]
 
         l1_n3.children = [l2_n1,l2_n2]
 

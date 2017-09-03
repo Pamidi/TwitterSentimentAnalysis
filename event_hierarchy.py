@@ -60,6 +60,13 @@ class Event:
     def __str__(self):
         return self.title
 
+    def __cmp__(self,other):
+            if self.median_timestamp < other.median_timestamp:
+                return -1
+            elif self.median_timestamp > other.median_timestamp:
+                return 1
+            else:return 0
+
 class EventHierarchy:
     """
     Each match has an appropriate event hierarchy
@@ -70,7 +77,6 @@ class EventHierarchy:
     """
     def __init__(self, root):
         self.root = root
-
 
     def _display_tree(self, nd):
         if not nd:
@@ -94,6 +100,23 @@ class EventHierarchy:
 
     def display_tree(self):
         self._display_tree(self.root)
+
+    def _collect_leaf_events(self, nd):
+        if not nd:
+            return []
+
+        if not nd.children:
+            return [nd]
+
+        result = []
+
+        for child in nd.children:
+            result = result + self._collect_leaf_events(child)
+
+        return result
+
+    def collect_leaf_events(self):
+        return self._collect_leaf_events(self.root)
 
     def _propogate_tweet(self, nd, tokens, tweet):
         #if no tokens, return
@@ -183,6 +206,15 @@ class EventHierarchy:
         if ('wicket' in tokens) or ('out' in tokens) or ('lbw' in tokens) or ('caught' in tokens) or ('bowled' in tokens):
             #if boundary, don't consider this as a wicket
             if ('six' in tokens) or ('four' in tokens):
+                try:
+                    for word in ['wicket','out','lbw','caught','bowled']:
+                        tokens.remove(word)
+                except:
+                    pass
+
+        #appeal and wicket are unlikely
+        if 'appeal' in tokens:
+            if ('wicket' in tokens) or ('out' in tokens) or ('lbw' in tokens) or ('caught' in tokens) or ('bowled' in tokens):
                 try:
                     for word in ['wicket','out','lbw','caught','bowled']:
                         tokens.remove(word)
