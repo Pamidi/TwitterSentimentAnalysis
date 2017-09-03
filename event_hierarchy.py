@@ -158,21 +158,20 @@ class EventHierarchy:
 
         #if node is a leaf node, return
         if not nd.children:
-            return []
-
-        import pdb; pdb.set_trace()
-
-        print "title:",nd.title
+            return nd.keywords
 
         #else propogate the value of its children
         agg_keywords = nd.keywords
         for child in nd.children:
-            if not agg_words:
+            if not agg_keywords:
                 agg_keywords = self._aggregate_keyword_for_node(child)
             else:
                 agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
 
         nd.keywords = agg_keywords
+        print "title:",nd.title
+        print "keywords:",nd.keywords
+
         return agg_keywords
 
     def aggregate_keyword_for_nodes(self):
