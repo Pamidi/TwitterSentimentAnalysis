@@ -4,6 +4,7 @@
 #3.four, six, ith wicket
 #4. ith four, ith six
 import heapq
+import time
 
 class Event:
     """
@@ -24,10 +25,16 @@ class Event:
         #to control nodes like wickets, century, six, fours etc.
         self.is_dynamic = is_dynamic
 
-    def find_new_median(self, tweet):
-        if self.median_timestamp%2==0:
-            heapq.heappush(self.maxHeap, -1*tweet.ts)
-            self.N+=1
+    def adjust_median_util_heaps(self, tweet):
+        import ipdb; ipdb.set_trace()
+        tweet_ts = time.mktime(tweet.ts.timetuple())
+        n = 0 if not self.tweets_for_event else len(self.tweets_for_event)
+
+        self.tweets_for_event.append(tweet)
+
+        if n%2==0:
+            heapq.heappush(self.maxHeap, -1*tweet_ts)
+            n+=1
             if len(self.minHeap)==0:
                 return
             if -1*self.maxHeap[0]>self.minHeap[0]:
@@ -36,12 +43,15 @@ class Event:
                 heapq.heappush(self.maxHeap, -1*toMax)
                 heapq.heappush(self.minHeap, toMin)
         else:
-            toMin=-1*heapq.heappushpop(self.maxHeap, -1*tweet.ts)
+            toMin=-1*heapq.heappushpop(self.maxHeap, -1*tweet_ts)
             heapq.heappush(self.minHeap, toMin)
-            self.median_timestamp+=1
+            n+=1
 
     def getMedian(self):
-        if self.median_timestamp%2==0:
+        import ipdb; ipdb.set_trace()
+        n = 0 if not self.tweets_for_event else len(self.tweets_for_event)
+
+        if n%2==0:
             return (-1*self.maxHeap[0]+self.minHeap[0])/2.0
         else:
             return -1*self.maxHeap[0]
@@ -63,7 +73,7 @@ class EventHierarchy:
     def __init__(self, root):
         self.root = root
 
-    def _propogate_tweet(nd, tokens, tweet):
+    def _propogate_tweet(self, nd, tokens, tweet):
         #if no tokens, return
         if not tokens:
             return
@@ -75,9 +85,9 @@ class EventHierarchy:
         #and calculate the median of the list
         if (not nd.is_dynamic) and (not nd.children):
             #calculate the new median
-            nd.median_timestamp = nd.find_new_median(tweet)
+            nd.adjust_median_util_heaps(tweet)
+            nd.median_timestamp = nd.getMedian()
 
-            nd.tweets_for_event.append(tweet)
             return
 
         if (nd.is_dynamic):
@@ -86,7 +96,7 @@ class EventHierarchy:
             #timestamp. if it exceeds a threshold, create a new node, else
             #update the median of the last cluster group
             #if no child or tweet.tm outside threshold
-            if (not nd.children) or (tweet.tm - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
+            if (not nd.children) or (tweet.ts - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
                 #add new node
                 #create new Event node
                 new_node_name = nd.title + '_' + str(len(nd.children) + 1)
@@ -99,7 +109,7 @@ class EventHierarchy:
             return
 
         #else for any of the child that contain they token, take the path
-        for child in nd.childen:
+        for child in nd.children:
             #if any of the token match the children take the path
             if bool(set(tokens) and set(child.keywords)):
                 #take this path

@@ -46,6 +46,7 @@ class TwitterClient:
         self.auth.set_access_token(self._access_token, self._access_token_secret)
         api = tweepy.API(self.auth)
 
+        print "streaming tweets.."
         new_tweets = api.user_timeline(screen_name = screen_name,count=200)
 
         alltweets = []

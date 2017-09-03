@@ -2,13 +2,13 @@ class Tweet:
     """
     Model a tweet for our system
     """
-    def __init__(self, text, tm):
+    def __init__(self, text, ts):
         self.text = text
-        self.tm = tm
+        self.ts = ts
 
     def __cmp__(self,other):
-        if self.tm < other.tm:
+        if self.ts < other.ts:
             return -1
-        elif self.tm > other.tm:
+        elif self.ts > other.ts:
             return 1
         else:return 0
