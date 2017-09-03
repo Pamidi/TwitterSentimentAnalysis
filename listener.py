@@ -28,7 +28,7 @@ class TwitterListener(tweepy.StreamListener):
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(decoded['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
             time_ = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
 
-        if (text not in self.visited) and ('SIX' in text):
+        if (text not in self.visited):
             self.visited[text] = True
             print "text:",text
             print "time:",time_

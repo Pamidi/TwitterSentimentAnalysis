@@ -15,8 +15,8 @@ class Event:
 
     def __init__(self, title, keywords = None, children = None, is_dynamic = False):
         self.title = title
-        self.keywords = keywords
-        self.children = children
+        self.keywords = keywords if keywords else []
+        self.children = children if children else []
         self.median_timestamp = 0
         #list of tweets for this cluster
         self.tweets_for_event = []
@@ -26,7 +26,6 @@ class Event:
         self.is_dynamic = is_dynamic
 
     def adjust_median_util_heaps(self, tweet):
-        import ipdb; ipdb.set_trace()
         tweet_ts = time.mktime(tweet.ts.timetuple())
         n = 0 if not self.tweets_for_event else len(self.tweets_for_event)
 
@@ -48,7 +47,6 @@ class Event:
             n+=1
 
     def getMedian(self):
-        import ipdb; ipdb.set_trace()
         n = 0 if not self.tweets_for_event else len(self.tweets_for_event)
 
         if n%2==0:
@@ -96,16 +94,20 @@ class EventHierarchy:
             #timestamp. if it exceeds a threshold, create a new node, else
             #update the median of the last cluster group
             #if no child or tweet.tm outside threshold
-            if (not nd.children) or (tweet.ts - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
+            tweet_ts =  time.mktime(tweet.ts.timetuple())
+
+            if (not nd.children) or (tweet_ts - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
                 #add new node
                 #create new Event node
                 new_node_name = nd.title + '_' + str(len(nd.children) + 1)
                 cnd = Event(new_node_name, keywords = nd.keywords)
+                cnd.adjust_median_util_heaps(tweet)
+                cnd.median_timestamp = cnd.getMedian()
                 nd.children.append(cnd)
             else:
                 #calculate the new median
-                nd.children[-1].median_timestamp = nd.children[-1].find_new_median(tweet)
-                nd.children[-1].tweets_for_event.append(tweet)
+                nd.children[-1].adjust_median_util_heaps(tweet)
+                nd.children[-1].median_timestamp = nd.children[-1].getMedian()
             return
 
         #else for any of the child that contain they token, take the path
@@ -173,10 +175,7 @@ class EventHierarchy:
         #else propogate the value of its children
         agg_keywords = nd.keywords
         for child in nd.children:
-            if not agg_keywords:
-                agg_keywords = self._aggregate_keyword_for_node(child)
-            else:
-                agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
+            agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
 
         nd.keywords = agg_keywords
         print "title:",nd.title
