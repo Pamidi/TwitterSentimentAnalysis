@@ -167,7 +167,10 @@ class EventHierarchy:
         #else propogate the value of its children
         agg_keywords = nd.keywords
         for child in nd.children:
-            agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
+            if not agg_words:
+                agg_keywords = self._aggregate_keyword_for_node(child)
+            else:
+                agg_keywords = agg_keywords + self._aggregate_keyword_for_node(child)
 
         nd.keywords = agg_keywords
         return agg_keywords
