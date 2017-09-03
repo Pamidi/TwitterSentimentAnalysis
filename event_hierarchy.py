@@ -9,7 +9,10 @@ class Event:
     """
     represents each event in the event hierarchy
     """
-    def __init__(self, title, keywords = None, children = []):
+    #IN MILLISECONDS
+    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000
+
+    def __init__(self, title, keywords = None, children = [], is_dynamic = False):
         self.title = title
         self.keywords = keywords
         self.children = children
@@ -17,6 +20,9 @@ class Event:
         #list of tweets for this cluster
         self.tweets_for_event = []
         self.minHeap, self.maxHeap = [], []
+
+        #to control nodes like wickets, century, six, fours etc.
+        self.is_dynamic = is_dynamic
 
     def find_new_median(self, tweet):
         if self.median_timestamp%2==0:
@@ -67,11 +73,30 @@ class EventHierarchy:
 
         #handle leaf nodes, here we need to store the tweet
         #and calculate the median of the list
-        if not nd.children:
+        if (not nd.is_dynamic) and (not nd.children):
             #calculate the new median
-            med_new = nd.find_new_median(tweet)
+            nd.median_timestamp = nd.find_new_median(tweet)
+
             nd.tweets_for_event.append(tweet)
-            pass
+            return
+
+        if (nd.is_dynamic):
+            #this means we are at a node, that might get an additional child
+            #compare the median timestamp of the last child with the new tweets
+            #timestamp. if it exceeds a threshold, create a new node, else
+            #update the median of the last cluster group
+            #if no child or tweet.tm outside threshold
+            if (not nd.children) or (tweet.tm - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
+                #add new node
+                #create new Event node
+                new_node_name = nd.title + '_' + str(len(nd.children) + 1)
+                cnd = Event(new_node_name, keywords = nd.keywords)
+                nd.children.append(cnd)
+            else:
+                #calculate the new median
+                nd.children[-1].median_timestamp = nd.children[-1].find_new_median(tweet)
+                nd.children[-1].tweets_for_event.append(tweet)
+            return
 
         #else for any of the child that contain they token, take the path
         for child in nd.childen:
