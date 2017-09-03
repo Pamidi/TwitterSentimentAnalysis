@@ -164,6 +164,11 @@ class EventHierarchy:
             if 'wicket' in tkns:
                 tokens.remove('wicket')
 
+        #century and come with wicket
+        if ('fifty' in tokens) or ('50' in tokens) or ('half century' in tokens):
+            if 'wicket' in tkns:
+                tokens.remove('wicket')
+
         self._propogate_tweet(self.root, tokens, tweet)
 
     def _aggregate_keyword_for_node(self, nd):
