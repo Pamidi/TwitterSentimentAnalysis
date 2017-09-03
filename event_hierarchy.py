@@ -119,8 +119,9 @@ class EventHierarchy:
             #update the median of the last cluster group
             #if no child or tweet.tm outside threshold
             tweet_ts =  time.mktime(tweet.ts.timetuple())
+            import ipdb; ipdb.set_trace()
 
-            if (not nd.children) or (tweet_ts - nd.median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
+            if (not nd.children) or (tweet_ts - nd.children[-1].median_timestamp > Event.NODE_SPLIT_TIMESTAMP_THRESHOLD):
                 #add new node
                 #create new Event node
                 new_node_name = nd.title + '_' + str(len(nd.children) + 1)
@@ -129,7 +130,7 @@ class EventHierarchy:
                 cnd.median_timestamp = cnd.getMedian()
                 nd.children.append(cnd)
 
-            elif tweet_ts - nd.median_timestamp < Event.NODE_SPLIT_TIMESTAMP_THRESHOLD:
+            elif tweet_ts - nd.children[-1].median_timestamp < Event.NODE_SPLIT_TIMESTAMP_THRESHOLD:
                 #find the first bucket which place
                 cur = len(nd.children)-1
                 while cur>=0:
