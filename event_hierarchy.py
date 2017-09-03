@@ -160,12 +160,12 @@ class EventHierarchy:
                     pass
 
         #century and come with wicket
-        if ('century' in tokens) or ('hundred' in tokens) or ('100' in tokens):
+        if ('century' in tokens) or ('hundred' in tokens):
             if 'wicket' in tkns:
                 tokens.remove('wicket')
 
         #century and come with wicket
-        if ('fifty' in tokens) or ('50' in tokens) or ('half century' in tokens):
+        if ('fifty' in tokens) or ('half century' in tokens):
             if 'wicket' in tokens:
                 tokens.remove('wicket')
 
