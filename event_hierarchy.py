@@ -78,7 +78,7 @@ class EventHierarchy:
 
         #print this node if it has tweets
         if nd.tweets_for_event:
-            print "NODE:", nd.title        
+            print "NODE:", nd.title
             for twt in nd.tweets_for_event:
                 print "tweet text:",twt.text
                 print "tweet time:",twt.ts
@@ -149,44 +149,22 @@ class EventHierarchy:
         modify per requirement of the match
         """
         #handling precedence of words(just a basic model)
-        tkns = []
-        if  'toss' in tokens:
-            tkns+= ['toss']
-
-        if 'six' in tokens:
-            tkns+= ['six']
-
-        if 'four' in tokens:
-            tkns+= ['four']
-
+        #wicket and boundary means boundary
         if ('wicket' in tokens) or ('out' in tokens) or ('lbw' in tokens) or ('caught' in tokens) or ('bowled' in tokens):
             #if boundary, don't consider this as a wicket
-            if ('six' not in tkns) and ('four' not in tkns):
-                tkns+= ['wicket']
+            if ('six' in tokens) or ('four' in tokens):
+                try:
+                    for word in ['wicket','out','lbw','caught','bowled']:
+                        tokens.remove(word)
+                except:
+                    pass
 
+        #century and come with wicket
         if ('century' in tokens) or ('hundred' in tokens) or ('100' in tokens):
-            if 'wicket' not in tkns:
-                tkns+= ['']
+            if 'wicket' in tkns:
+                tokens.remove('wicket')
 
-        if ('fifty' in tokens) or ('50' in tokens) or ('half century' in tokens):
-            tkns += 'fifty'
-
-        if 'powerplay' in tokens:
-            tkns+= ['powerplay']
-
-        if 'hat-trick' in tokens:
-            tkns+= ['hat-trick']
-
-        if 'maiden' in tokens:
-            tkns+= ['maiden']
-
-        if 'drinks' in tokens:
-            tkns+= ['drinks']
-
-        if 'innings' in tokens or 'break' in tokens:
-            tkns+= ['innings']
-
-        self._propogate_tweet(self.root, tkns, tweet)
+        self._propogate_tweet(self.root, tokens, tweet)
 
     def _aggregate_keyword_for_node(self, nd):
         if not nd:
