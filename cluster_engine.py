@@ -28,6 +28,10 @@ class ClusteringEngine:
         #identify the applicable event keywords for this text
         text = self.cleanup_data(tweet.text)
         tokens = [str(t.lower()).translate(None, string.punctuation) for t in tweet.text.split()]
+        import ipdb; ipdb.set_trace()
+        applicable_tokens = []
+        for phrase in self.match_event_tree.root.keywords:
+            if phrase in " ".join(tokens):
+                applicable_tokens.append(phrase)
 
-        applicable_tokens = [token for token in tokens if token in self.match_event_tree.root.keywords]
         self.match_event_tree.propogate_tweet(applicable_tokens, tweet)

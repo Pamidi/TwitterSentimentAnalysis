@@ -54,10 +54,13 @@ class Match:
         l1_n9 = Event('HAT-TRICK',keywords=['hat-trick'], is_dynamic = True)
         l1_n10 = Event('MAIDEN',keywords=['maiden'], is_dynamic = True)
         l1_n11 = Event('MAN_OF_THE_MATCH', keywords = ['man of the match','best player'])
+        l1_n12 = Event('BOWLING_CHANGE', keywords = ['into the attack', 'bowling change'], is_dynamic = True)
+        l1_n13 = Event('NEW_BATSMAN', keywords = ['new batsman'], is_dynamic = True)
+        l1_n14 = Event('SCORE_UPDATE', keywords = ['ovs','over','overs','score'], is_dynamic = True)
         l2_n1 = Event('FOUR',keywords=['four'], is_dynamic = True)
         l2_n2 = Event('SIX',keywords=['six'], is_dynamic = True)
 
-        root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11]
+        root.children = [l1_n1,l1_n2,l1_n3,l1_n4,l1_n5,l1_n6,l1_n7,l1_n8,l1_n9,l1_n10, l1_n11, l1_n12, l1_n13, l1_n14]
 
         l1_n3.children = [l2_n1,l2_n2]
 
