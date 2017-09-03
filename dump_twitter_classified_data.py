@@ -3,8 +3,8 @@
 def main():
     #just retrieve the pickled root of the Tree
     import pickle
-    
-    with open("/home/xavier/Desktop/twitter/data/root.pkl", "rb") as input_file:
+
+    with open("/home/xavier/Desktop/root.pkl", "rb") as input_file:
         hierarchy_tree = pickle.load(input_file)
 
     #get the flattened leaf cluster events
@@ -20,7 +20,6 @@ def main():
 
         print "\n"
         print "\n"
-        import ipdb; ipdb.set_trace()
 
 if __name__ == "__main__":
     main()
