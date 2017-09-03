@@ -11,7 +11,7 @@ class Event:
     represents each event in the event hierarchy
     """
     #IN MILLISECONDS
-    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000 * 15
+    NODE_SPLIT_TIMESTAMP_THRESHOLD = 2000 * 70
 
     def __init__(self, title, keywords = None, children = None, is_dynamic = False):
         self.title = title
@@ -128,6 +128,36 @@ class EventHierarchy:
                 cnd.adjust_median_util_heaps(tweet)
                 cnd.median_timestamp = cnd.getMedian()
                 nd.children.append(cnd)
+
+            elif tweet_ts - nd.median_timestamp < Event.NODE_SPLIT_TIMESTAMP_THRESHOLD:
+                #find the first bucket which place
+                cur = len(nd.children)-1
+                while cur>=0:
+                    #check if this cur accomodates the tweet
+                    if abs(tweet_ts - nd.children[cur].median_timestamp) <= Event.NODE_SPLIT_TIMESTAMP_THRESHOLD:
+                        break
+                    cur = cur - 1
+
+                #cur is either -1 or a number
+                if cur == -1:
+                    #create  a new node and update the title for each event nodes
+                    new_node_name = nd.title + '_' + str(1)
+                    cnd = Event(new_node_name, keywords = nd.keywords)
+                    cnd.adjust_median_util_heaps(tweet)
+                    cnd.median_timestamp = cnd.getMedian()
+                    nd.children = [cnd] + nd.children
+
+                    #update the name for all nodes from index 1
+                    for index, value in enumerate(nd.children[1:]):
+                        nd.children[index+1].title = nd.title + '_' + str(index + 1)
+
+                else:
+                    #add it to the existing node
+
+                    #calculate the new median
+                    nd.children[cur].adjust_median_util_heaps(tweet)
+                    nd.children[cur].median_timestamp = nd.children[cur].getMedian()
+
             else:
                 #calculate the new median
                 nd.children[-1].adjust_median_util_heaps(tweet)
