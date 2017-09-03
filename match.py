@@ -63,7 +63,6 @@ class Match:
 
 
         self.match_event_tree = EventHierarchy(root)
-        import pdb; pdb.set_trace()
         #aggregate_keyword_for_nodes now
         self.match_event_tree.aggregate_keyword_for_nodes()
 
