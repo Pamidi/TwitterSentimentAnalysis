@@ -40,7 +40,7 @@ class TwitterListener(tweepy.StreamListener):
         #create a tweet object
         tweet = Tweet(text, time_)
         self.cluster_engine.process(tweet)
-
+        import ipdb; ipdb.set_trace()
         return True
 
     def on_status(self, status):

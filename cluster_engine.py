@@ -1,3 +1,5 @@
+import string
+
 class ClusteringEngine:
     def __init__(self, match):
         self.match = match
@@ -24,8 +26,9 @@ class ClusteringEngine:
         """
 
         #identify the applicable event keywords for this text
+        import ipdb; ipdb.set_trace()
         text = self.cleanup_data(tweet.text)
-        tokens = [t.lower() for t in tweet.text.split()]
+        tokens = [str(t.lower()).translate(None, string.punctuation) for t in tweet.text.split()]
 
         applicable_tokens = [token for token in tokens if token in self.match_event_tree.root.keywords]
         self.match_event_tree.propogate_tweet(applicable_tokens, tweet)

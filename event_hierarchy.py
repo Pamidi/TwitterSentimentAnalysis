@@ -126,6 +126,7 @@ class EventHierarchy:
         """
         #handling precedence of words(just a basic model)
         tkns = []
+        import ipdb; ipdb.set_trace()
         if  'toss' in tokens:
             tkns+= ['toss']
 
